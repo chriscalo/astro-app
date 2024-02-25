@@ -3,8 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon -e js,mjs,json,astro,sql --watch src --ignore dist --exec 'astro build && node run-server.mjs'",
-    "start": "nodemon --exec 'astro build && node run-server.mjs'",
+    "dev": "nodemon -e js,mjs,json,astro,sql --watch src --ignore dist --exec 'astro build && node run-server.js'",
+    "start": "nodemon --exec 'astro build && node run-server.js'",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
