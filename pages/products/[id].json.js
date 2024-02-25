@@ -5,18 +5,16 @@ export async function GET({ params }) {
   if (!product) {
     return new Response(null, {
       status: 404,
-      statusText: 'Not found'
+      statusText: "Not found",
     });
   }
 
-  return new Response(
-    JSON.stringify(product), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }
-  );
+  return new Response(JSON.stringify(product), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 async function getProduct(id) {
