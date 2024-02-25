@@ -1,0 +1,25 @@
+---
+import { parse } from "yaml";
+import { readFileSync } from "node:fs";
+import Layout from "~/layouts/Layout.astro";
+import ProductList from "./ProductList.vue";
+import products from "./products.yaml";
+
+const delay = 1500;
+await sleep(delay);
+
+async function sleep(ms) {
+  await new Promise(resolve => setTimeout(resolve, ms));
+}
+---
+
+<Layout title="Products">
+	<main>
+		<h1>Products</h1>
+		<p>
+		  This page loads after a delay of {delay} milliseconds to simulate fetching
+			the list of products.
+		</p>
+		<ProductList products={products}/>
+	</main>
+</Layout>
