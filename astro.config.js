@@ -4,6 +4,7 @@ import vue from "@astrojs/vue";
 
 // https://astro.build/config
 export default defineConfig({
+  srcDir: "./",
   output: "server",
   adapter: node({
     // See https://docs.astro.build/en/guides/integrations-guide/node/#mode
