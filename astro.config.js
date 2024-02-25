@@ -11,4 +11,11 @@ export default defineConfig({
     mode: "middleware",
   }),
   integrations: [vue()],
+  vite: {
+    resolve: {
+      alias: {
+        "~": "./",
+      },
+    },
+  },
 });

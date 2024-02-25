@@ -3,13 +3,14 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon -e js,mjs,json,astro,sql --watch src --ignore dist --exec 'astro build && node run-server.js'",
+    "dev": "nodemon -e js,mjs,json,astro,sql --watch . --ignore dist --exec 'astro build && node run-server.js'",
     "start": "nodemon --exec 'astro build && node run-server.js'",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "~": "file:./",
     "@astrojs/node": "^8.2.1",
     "@astrojs/vue": "^4.0.8",
     "astro": "^4.4.4",
