@@ -21,7 +21,7 @@ export async function GET({ params }) {
 
 function getProduct(id) {
   return {
-    id: 389238,
+    id: id,
     name: "Product 1",
     price: 100,
   };
