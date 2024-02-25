@@ -19,7 +19,7 @@ export async function GET({ params }) {
   );
 }
 
-function getProduct(id) {
+async function getProduct(id) {
   return {
     id: id,
     name: "Product 1",
