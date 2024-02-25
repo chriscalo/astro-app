@@ -3,21 +3,23 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon -e js,mjs,json,astro,sql --watch . --ignore dist --exec 'astro build && node run-server.js'",
+    "dev": "nodemon -e js,mjs,json,astro,sql,vue --watch . --ignore dist --exec 'astro build && node run-server.js'",
     "start": "nodemon --exec 'astro build && node run-server.js'",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "~": "file:./",
     "@astrojs/node": "^8.2.1",
     "@astrojs/vue": "^4.0.8",
+    "~": "file:./",
     "astro": "^4.4.4",
     "express": "^4.18.2",
-    "vue": "^3.4.19"
+    "vue": "^3.4.19",
+    "yaml": "^2.4.0"
   },
   "devDependencies": {
+    "@rollup/plugin-yaml": "^4.1.2",
     "nodemon": "^3.1.0"
   }
 }
