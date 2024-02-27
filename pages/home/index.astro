@@ -1,0 +1,23 @@
+---
+// import { loginRequired } from "~/util/auth.js";
+import Layout from "~/layouts/Layout.astro";
+import Counter from "./Counter.vue";
+
+// FIXME: move auth guards outside this file
+const { session } = Astro.locals;
+if (!session.isSignedIn()) {
+  return Astro.redirect(session.createSignInURL(Astro.url));
+}
+---
+
+<Layout title="Home">
+  <header>
+    <form action="/sign-out" method="POST">
+      <button type="submit">Sign out</button>
+    </form>
+  </header>
+	<main>
+		<p>You are signed in as {Astro.locals.session.username}</p>
+		<Counter client:load/>
+	</main>
+</Layout>

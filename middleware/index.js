@@ -1,5 +1,11 @@
 import { sequence } from "astro:middleware";
 
+async function inspect({ locals }, next) {
+  console.log("Astro middleware:");
+  console.log("locals:", locals);
+  return next();
+}
+
 async function validation(_, next) {
   console.log("validation request");
   const response = await next();
@@ -21,4 +27,9 @@ async function greeting(_, next) {
   return response;
 }
 
-export const onRequest = sequence(validation, auth, greeting);
+export const onRequest = sequence(
+  inspect,
+  validation,
+  auth,
+  greeting
+);
