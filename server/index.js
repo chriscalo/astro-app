@@ -1,6 +1,6 @@
 import express from "express";
-import auth from "./server/auth.js";
-import { handler as ssrHandler } from "./dist/server/entry.mjs";
+import auth from "./auth.js";
+import { handler as ssrHandler } from "~/dist/server/entry.mjs";
 
 const app = express();
 app.use(express.static("dist/client/"));
