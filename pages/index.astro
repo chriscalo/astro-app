@@ -1,17 +1,31 @@
 ---
 import Layout from "~/layouts/Layout.astro";
 
-const { session } = Astro.locals;
-if (session.isSignedIn()) {
-  return Astro.redirect("/home");
+const { request, redirect, locals } = Astro;
+const validation = [];
+if (request.method === "POST") {
+  const formData = await request.formData();
+  const username = formData.get("username");
+  const action = formData.get("action");
+  const returnTo = formData.get("returnTo") || "/home";
+  
+  if (username) {
+    locals.session.signin(username);
+    return redirect(returnTo);
+  } else {
+    validation.push("Enter a username");
+  }
 }
 
 const returnTo = Astro.url.searchParams.get("returnTo") || "/home";
+if (locals.session.isSignedIn()) {
+  return redirect(returnTo);
+}
 ---
 
 <Layout title="My first Astro app">
 	<main>
-		<form action="/sign-in" method="post">
+		<form action="." method="POST">
 		  <label>
 				<span>User name</span>
 				<input name="username"/>
@@ -22,6 +36,7 @@ const returnTo = Astro.url.searchParams.get("returnTo") || "/home";
 				name="action"
 				value="sign-in"
 			>Sign in</button>
+			{ validation.map(message => <p style="color: red">{message}</p>) }
 		</form>
 	</main>
 </Layout>
