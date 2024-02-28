@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon -e js,mjs,json,astro,sql,vue --watch . --ignore dist --exec 'astro build && node server/index.js'",
+    "dev": "nodemon -e js,mjs,json,astro,sql,vue --watch . --ignore dist --exec 'node server/index.js'",
     "start": "nodemon --exec 'astro build && node server/index.js'",
     "build": "astro build",
     "preview": "astro preview",
