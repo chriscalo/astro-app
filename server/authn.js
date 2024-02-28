@@ -14,7 +14,27 @@ server.use(clientSessions({
   activeDuration: duration("1h"),
 }));
 
-server.use((req, _, next) => {
+server.use(function (req, res, next) {
+  attachAuthnMethods(req, res);
+  attachSessionToLocals(req, res);
+  next();
+});
+
+export function signinRequired(req, res, next) {
+  const { session } = req;
+  
+  if (session.isSignedIn()) {
+    console.info(`signinRequired: Signed in as ${session.username}`);
+    return next();
+  } else {
+    console.info(`signinRequired: NOT signed in!!`);
+    const signInUrl = session.createSignInURL(req.originalUrl);
+    console.info(`redirecting from ${req.originalUrl} to ${signInUrl}`);
+    return res.redirect(signInUrl);
+  }
+}
+
+function attachAuthnMethods(req, res) {
   const { session } = req;
   
   Object.assign(session, {
@@ -23,8 +43,6 @@ server.use((req, _, next) => {
     isSignedIn,
     createSignInURL,
   });
-  
-  next();
   
   function signin(username) {
     assert(typeof username === "string", "username must be a string");
@@ -49,4 +67,10 @@ server.use((req, _, next) => {
     );
     return `${signInPath}?returnTo=${returnToEncoded}`;
   }
-});
+}
+
+function attachSessionToLocals(req, res) {
+  Object.assign(res.locals, {
+    session: req.session,
+  });
+}
