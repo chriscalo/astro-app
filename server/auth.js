@@ -1,6 +1,7 @@
 import express from "express";
 import clientSessions from "client-sessions";
 import duration from "parse-duration";
+import assert from "node:assert";
 
 const server = express();
 export default server;
@@ -15,25 +16,37 @@ server.use(clientSessions({
 
 server.use((req, _, next) => {
   const { session } = req;
+  
   Object.assign(session, {
-    signin(username) {
-      session.username = username;
-    },
-    signout() {
-      session.destroy();
-    },
-    isSignedIn() {
-      return session.username != null;
-    },
-    createSignInURL(returnTo) {
-      const signInPath = "/";
-      const url = new URL(returnTo, "http://localhost");
-      const encodedReturnTo = encodeURIComponent(
-        url.pathname + url.search + url.hash
-      );
-      return `${signInPath}?returnTo=${encodedReturnTo}`;
-    },
+    signin,
+    signout,
+    isSignedIn,
+    createSignInURL,
   });
   
   next();
+  
+  function signin(username) {
+    assert(typeof username === "string", "username must be a string");
+    assert(username.length > 0, "username is required");
+    session.username = username;
+  }
+  
+  function signout() {
+    session.destroy();
+  }
+  
+  function isSignedIn() {
+    return session.username != null;
+  }
+  
+  function createSignInURL(returnTo) {
+    const signInPath = "/";
+    // use throwaway `http://localhost` to handle relative URLs
+    const url = new URL(returnTo, "http://localhost");
+    const returnToEncoded = encodeURIComponent(
+      url.pathname + url.search + url.hash
+    );
+    return `${signInPath}?returnTo=${returnToEncoded}`;
+  }
 });
