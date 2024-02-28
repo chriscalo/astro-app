@@ -1,4 +1,5 @@
 import express from "express";
+import { rpcService }  from "rpc-light/server.js";
 import authn, { signinRequired } from "./authn.js";
 import astro from "./astro.js";
 
@@ -10,6 +11,18 @@ server.use([
   "/home",
   "/products",
 ], signinRequired);
+
+server.use("/rpc", rpcService({
+  greetingService: {
+    greet(name, exclaim = false) {
+      const punctuation = exclaim ? "!": "."
+      const message = `Hello, ${name}` + punctuation;
+      return {
+        message,
+      };
+    },
+  },
+}));
 
 server.use(astro);
 
