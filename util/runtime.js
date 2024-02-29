@@ -1,3 +1,4 @@
+// MAYBE: switch to npm package runtime-detect
 const isBrowser =
   typeof window !== "undefined" && typeof window.document !== "undefined";
 
