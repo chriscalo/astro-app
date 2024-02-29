@@ -3,40 +3,36 @@ import { fileURLToPath } from "node:url";
 import express from "express";
 import { build } from "astro";
 
+const DEVELOPMENT = (process.env.NODE_ENV !== "production");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 const server = express();
 export default server;
+const astroHandlers = startAstro();
 
-const astroReady = new Promise(async function (resolve, reject) {
-  const DEVELOPMENT = (process.env.NODE_ENV !== "production");
-  
+// serve Astro's static assets
+server.use(async function (req, res, next) {
+  const { staticHandler } = await astroHandlers;
+  staticHandler(req, res, next);
+});
+
+// serve Astro's SSR pages and endpoints
+server.use(async function (req, res, next) {
+  const { ssrHandler } = await astroHandlers;
+  const { locals } = res;
+  ssrHandler(req, res, next, locals);
+});
+
+async function startAstro() {
   if (DEVELOPMENT) {
     await build({
-      root: resolveRelativePath("../"),
+      root: resolve(__dirname, "../"),
     });
-    resolve(true);
-  } else {
-    resolve(true);
   }
-});
-
-server.use(async function (req, res, next) {
-  await astroReady;
-  next();
-});
-
-server.use(express.static("dist/client/"));
-
-let astroSsrHandler = null;
-server.use(async function (req, res, next) {
-  if (!astroSsrHandler) {
-    const { handler } = await import("~/dist/server/entry.mjs");
-    astroSsrHandler = handler
-  }
-  const { locals } = res;
-  astroSsrHandler(req, res, next, locals);
-});
-
-function resolveRelativePath(relativePath) {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  return resolve(__dirname, relativePath);
+  
+  const staticPath = resolve(__dirname, "../dist/client/");
+  return {
+    staticHandler: express.static(staticPath),
+    ssrHandler: (await import("~/dist/server/entry.mjs")).handler,
+  };
 }
